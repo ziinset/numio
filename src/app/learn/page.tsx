@@ -24,6 +24,7 @@ function LearnContent() {
     currentQuestion,
     sessionResults,
     isFinished,
+    setIsFinished,
     currentStreak,
     submitAnswer,
     finishSession,

@@ -101,6 +101,7 @@ export function useQuiz(topic: Topic) {
     currentQuestion,
     sessionResults,
     isFinished,
+    setIsFinished,
     currentStreak,
     submitAnswer,
     finishSession,
