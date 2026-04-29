@@ -1,5 +1,7 @@
 export type Topic = "addition" | "subtraction" | "multiplication" | "division";
 
+export type GameMode = "practice" | "study";
+
 export interface TopicProgress {
   topic: Topic;
   currentLevel: number;           // 1-5
@@ -11,10 +13,37 @@ export interface TopicProgress {
   lastPlayedAt: string;           // ISO date string
 }
 
+// --- Study Mode Types ---
+
+export interface QuestionWeight {
+  num1: number;
+  num2: number;
+  weight: number;           // 1 = normal/mastered, higher = needs more practice
+  timesAnswered: number;
+  timesCorrect: number;
+}
+
+export interface SubTopicProgress {
+  topic: Topic;
+  subTopicId: string;       // e.g., "4" for individual, "1-5" for range, "mix" for campuran
+  questions: QuestionWeight[];
+  totalAnswered: number;
+  totalCorrect: number;
+  totalWrong: number;
+  lastPlayedAt: string;
+}
+
+export interface StudyProgress {
+  subtopics: Record<string, SubTopicProgress>; // key = "{topic}_{id}", e.g. "multiplication_4", "multiplication_1-5"
+}
+
+// --- Main Progress ---
+
 export interface UserProgress {
   version: number;
   topics: Record<Topic, TopicProgress>;
   achievements: Achievement[];
+  study: StudyProgress;
 }
 
 export interface Achievement {

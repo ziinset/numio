@@ -1,36 +1,40 @@
 "use client";
 
+import { useState } from "react";
 import { useProgress } from "@/hooks/use-progress";
 import { TopicCard } from "@/components/quiz/topic-card";
+import { ModeSelectDialog } from "@/components/quiz/mode-select-dialog";
 import { Button } from "@/components/ui/button";
+import { Topic } from "@/types";
 import { Calculator, Sparkles, TrendingUp, Trophy } from "lucide-react";
 import Link from "next/link";
 
+const topicList = [
+  {
+    id: "addition" as Topic,
+    title: "Penjumlahan",
+    description: "Belajar menjumlahkan angka dari yang termudah sampai menantang.",
+  },
+  {
+    id: "subtraction" as Topic,
+    title: "Pengurangan",
+    description: "Latih kemampuan pengurangan kamu dengan soal-soal adaptif.",
+  },
+  {
+    id: "multiplication" as Topic,
+    title: "Perkalian",
+    description: "Hafalkan dan kuasai perkalian dengan metode yang seru.",
+  },
+  {
+    id: "division" as Topic,
+    title: "Pembagian",
+    description: "Pahami konsep pembagian tanpa sisa dengan bertahap.",
+  },
+];
+
 export default function HomePage() {
   const { progress } = useProgress();
-
-  const topics = [
-    {
-      id: "addition",
-      title: "Penjumlahan",
-      description: "Belajar menjumlahkan angka dari yang termudah sampai menantang.",
-    },
-    {
-      id: "subtraction",
-      title: "Pengurangan",
-      description: "Latih kemampuan pengurangan kamu dengan soal-soal adaptif.",
-    },
-    {
-      id: "multiplication",
-      title: "Perkalian",
-      description: "Hafalkan dan kuasai perkalian dengan metode yang seru.",
-    },
-    {
-      id: "division",
-      title: "Pembagian",
-      description: "Pahami konsep pembagian tanpa sisa dengan bertahap.",
-    },
-  ];
+  const [selectedTopic, setSelectedTopic] = useState<{ id: Topic; title: string } | null>(null);
 
   if (!progress) return <div className="flex items-center justify-center min-h-[50vh]">Memuat data...</div>;
 
@@ -50,8 +54,8 @@ export default function HomePage() {
           Tanpa ribet, langsung belajar!
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="text-lg px-8 h-14 rounded-2xl shadow-xl" asChild>
-            <Link href="/learn?topic=addition">Mulai Belajar Sekarang</Link>
+          <Button size="lg" className="text-lg px-8 h-14 rounded-2xl shadow-xl" onClick={() => setSelectedTopic({ id: "addition", title: "Penjumlahan" })}>
+            Mulai Belajar Sekarang
           </Button>
           <Button size="lg" variant="outline" className="text-lg px-8 h-14 rounded-2xl" asChild>
             <Link href="/progress">Lihat Progress Saya</Link>
@@ -108,17 +112,26 @@ export default function HomePage() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {topics.map((topic) => (
+          {topicList.map((topic) => (
             <TopicCard
               key={topic.id}
-              topic={topic.id as any}
+              topic={topic.id}
               title={topic.title}
               description={topic.description}
-              progress={progress.topics[topic.id as keyof typeof progress.topics]}
+              progress={progress.topics[topic.id]}
+              onClick={() => setSelectedTopic({ id: topic.id, title: topic.title })}
             />
           ))}
         </div>
       </section>
+
+      {/* Mode Selection Dialog */}
+      <ModeSelectDialog
+        isOpen={!!selectedTopic}
+        onClose={() => setSelectedTopic(null)}
+        topic={selectedTopic?.id || "addition"}
+        topicTitle={selectedTopic?.title || ""}
+      />
     </div>
   );
 }

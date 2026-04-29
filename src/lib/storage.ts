@@ -1,7 +1,7 @@
-import { UserProgress, Topic, TopicProgress } from "@/types";
+import { UserProgress, Topic, TopicProgress, StudyProgress, SubTopicProgress } from "@/types";
 
 const STORAGE_KEY = "numio_data";
-const CURRENT_VERSION = 1;
+const CURRENT_VERSION = 2;
 
 const DEFAULT_TOPIC_PROGRESS = (topic: Topic): TopicProgress => ({
   topic,
@@ -14,6 +14,10 @@ const DEFAULT_TOPIC_PROGRESS = (topic: Topic): TopicProgress => ({
   lastPlayedAt: new Date().toISOString(),
 });
 
+const DEFAULT_STUDY_PROGRESS: StudyProgress = {
+  subtopics: {},
+};
+
 const DEFAULT_PROGRESS: UserProgress = {
   version: CURRENT_VERSION,
   topics: {
@@ -23,6 +27,7 @@ const DEFAULT_PROGRESS: UserProgress = {
     division: DEFAULT_TOPIC_PROGRESS("division"),
   },
   achievements: [],
+  study: DEFAULT_STUDY_PROGRESS,
 };
 
 export const storage = {
@@ -40,9 +45,12 @@ export const storage = {
     try {
       const parsed = JSON.parse(data) as UserProgress;
       
-      // Simple migration check
+      // Migration: add study field if missing (v1 -> v2)
+      if (!parsed.study) {
+        parsed.study = DEFAULT_STUDY_PROGRESS;
+      }
+
       if (parsed.version < CURRENT_VERSION) {
-        // Handle migration here if needed
         return { ...DEFAULT_PROGRESS, ...parsed, version: CURRENT_VERSION };
       }
       
@@ -60,6 +68,26 @@ export const storage = {
       ...update,
     };
     storage.saveProgress(progress);
+  },
+
+  // --- Study Mode Storage ---
+
+  getSubTopicProgress: (topic: Topic, subTopicId: string): SubTopicProgress | null => {
+    const progress = storage.getProgress();
+    const key = `${topic}_${subTopicId}`;
+    return progress.study.subtopics[key] || null;
+  },
+
+  saveSubTopicProgress: (subTopicProgress: SubTopicProgress): void => {
+    const progress = storage.getProgress();
+    const key = `${subTopicProgress.topic}_${subTopicProgress.subTopicId}`;
+    progress.study.subtopics[key] = subTopicProgress;
+    storage.saveProgress(progress);
+  },
+
+  getStudyProgress: (): StudyProgress => {
+    const progress = storage.getProgress();
+    return progress.study;
   },
 
   resetProgress: (): void => {

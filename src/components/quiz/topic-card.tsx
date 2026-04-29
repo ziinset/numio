@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Topic, TopicProgress } from "@/types";
 import { Plus, Minus, X, Divide, ChevronRight } from "lucide-react";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 interface TopicCardProps {
@@ -12,6 +11,7 @@ interface TopicCardProps {
   title: string;
   description: string;
   progress: TopicProgress;
+  onClick: () => void;
 }
 
 const icons = {
@@ -21,7 +21,7 @@ const icons = {
   division: { icon: Divide, color: "text-green-500", bg: "bg-green-50 dark:bg-green-950/20", border: "border-green-100 dark:border-green-900/50" },
 };
 
-export function TopicCard({ topic, title, description, progress }: TopicCardProps) {
+export function TopicCard({ topic, title, description, progress, onClick }: TopicCardProps) {
   const { icon: Icon, color, bg, border } = icons[topic];
   
   const accuracy = progress.totalAnswered > 0 
@@ -29,7 +29,7 @@ export function TopicCard({ topic, title, description, progress }: TopicCardProp
     : 0;
 
   return (
-    <Link href={`/learn?topic=${topic}`}>
+    <button onClick={onClick} className="text-left w-full focus:outline-none">
       <Card className="group h-full overflow-hidden transition-all hover:shadow-lg hover:border-primary/20 active:scale-[0.98] cursor-pointer">
         <CardHeader className="pb-2">
           <div className="flex justify-between items-start">
@@ -55,10 +55,10 @@ export function TopicCard({ topic, title, description, progress }: TopicCardProp
             </div>
           </div>
           <div className="mt-6 flex items-center text-primary font-bold text-sm group-hover:translate-x-1 transition-transform">
-            Mulai Belajar <ChevronRight className="ml-1 h-4 w-4" />
+            Pilih Mode <ChevronRight className="ml-1 h-4 w-4" />
           </div>
         </CardContent>
       </Card>
-    </Link>
+    </button>
   );
 }

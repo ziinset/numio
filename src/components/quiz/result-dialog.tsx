@@ -29,7 +29,7 @@ export function ResultDialog({ isOpen, onClose, results, topic }: ResultDialogPr
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-sm max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="mx-auto bg-primary/10 p-3 rounded-full w-fit mb-4">
             <Trophy className="h-8 w-8 text-primary" />
@@ -40,33 +40,33 @@ export function ResultDialog({ isOpen, onClose, results, topic }: ResultDialogPr
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-2 gap-4 py-6">
-          <div className="flex flex-col items-center p-4 bg-muted/30 rounded-2xl">
-            <CheckCircle2 className="h-5 w-5 text-green-500 mb-1" />
-            <span className="text-2xl font-bold">{accuracy}%</span>
-            <span className="text-xs text-muted-foreground uppercase font-semibold">Akurasi</span>
+        <div className="grid grid-cols-2 gap-2 py-4">
+          <div className="flex flex-col items-center p-3 bg-muted/30 rounded-xl">
+            <CheckCircle2 className="h-4 w-4 text-green-500 mb-1" />
+            <span className="text-xl font-bold">{accuracy}%</span>
+            <span className="text-[10px] text-muted-foreground uppercase font-semibold">Akurasi</span>
           </div>
-          <div className="flex flex-col items-center p-4 bg-muted/30 rounded-2xl">
-            <Clock className="h-5 w-5 text-blue-500 mb-1" />
-            <span className="text-2xl font-bold">{averageTime}s</span>
-            <span className="text-xs text-muted-foreground uppercase font-semibold">Rata-rata</span>
+          <div className="flex flex-col items-center p-3 bg-muted/30 rounded-xl">
+            <Clock className="h-4 w-4 text-blue-500 mb-1" />
+            <span className="text-xl font-bold">{averageTime}s</span>
+            <span className="text-[10px] text-muted-foreground uppercase font-semibold">Rata-rata</span>
           </div>
-          <div className="flex flex-col items-center p-4 bg-muted/30 rounded-2xl">
-            <span className="text-2xl font-bold">{correctAnswers}</span>
-            <span className="text-xs text-muted-foreground uppercase font-semibold">Benar</span>
+          <div className="flex flex-col items-center p-3 bg-muted/30 rounded-xl">
+            <span className="text-xl font-bold">{correctAnswers}</span>
+            <span className="text-[10px] text-muted-foreground uppercase font-semibold">Benar</span>
           </div>
-          <div className="flex flex-col items-center p-4 bg-muted/30 rounded-2xl">
-            <span className="text-2xl font-bold">{totalQuestions}</span>
-            <span className="text-xs text-muted-foreground uppercase font-semibold">Total Soal</span>
+          <div className="flex flex-col items-center p-3 bg-muted/30 rounded-xl">
+            <span className="text-xl font-bold">{totalQuestions}</span>
+            <span className="text-[10px] text-muted-foreground uppercase font-semibold">Total Soal</span>
           </div>
         </div>
 
         <DialogFooter className="flex-col sm:flex-row gap-2">
-          <Button variant="outline" className="w-full" onClick={() => window.location.reload()}>
-            <RotateCcw className="mr-2 h-4 w-4" /> Ulangi
+          <Button variant="outline" size="sm" className="w-full" onClick={() => window.location.reload()}>
+            <RotateCcw className="mr-1.5 h-3.5 w-3.5" /> Ulangi
           </Button>
-          <Button className="w-full" onClick={() => window.location.href = "/"}>
-            <ArrowRight className="mr-2 h-4 w-4" /> Selesai
+          <Button size="sm" className="w-full" onClick={() => window.location.href = "/"}>
+            <ArrowRight className="mr-1.5 h-3.5 w-3.5" /> Selesai
           </Button>
         </DialogFooter>
       </DialogContent>
